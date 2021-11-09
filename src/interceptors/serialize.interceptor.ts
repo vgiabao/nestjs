@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {UserDto} from 'src/users/dtos/user.dto';
 import {plainToClass} from 'class-transformer';
 
 //make sure dto is at least a class

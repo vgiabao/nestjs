@@ -14,6 +14,8 @@ export class User {
   email: string;
   @Column()
   password: string;
+  @Column()
+  tokens: string
   @AfterInsert()
   logInsert() {
     console.log('insert new user ', this.id);
