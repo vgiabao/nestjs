@@ -9,6 +9,7 @@ export class BooksController {
   constructor(private bookService: BooksService) {
   }
   @Public()
+  @Roles('public')
   @Get('/')
   async getAllBooks(){
     return await  this.bookService.getAllBook()

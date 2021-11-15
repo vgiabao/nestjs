@@ -3,6 +3,8 @@ import {
   Column,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { IsBoolean, IsOptional } from 'class-validator';
+
 @Entity()
 export class Book {
   @PrimaryGeneratedColumn()
@@ -16,5 +18,6 @@ export class Book {
   @Column()
   content: string;
   @Column()
+  @IsOptional()
   cover: string;
 }

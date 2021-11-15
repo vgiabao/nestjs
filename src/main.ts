@@ -11,7 +11,7 @@ async function bootstrap() {
     app.use(cookieSession({
         keys: ['123']
     }))
-    app.useGlobalGuards(new RolesGuard())
+
 
     const config = new DocumentBuilder()
         .setTitle('Car report example')

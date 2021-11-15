@@ -18,7 +18,7 @@ import { History } from './history/history.entity';
       type: 'postgres',
       url: process.env.DATABASE_URL,
       entities: [User, Book, History],
-      synchronize: false,
+      synchronize: true,
       autoLoadEntities: true,
       migrations: ['dist/migrations/*{.ts,.js}'],
       migrationsTableName: 'migrations_typeorm',

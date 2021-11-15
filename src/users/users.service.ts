@@ -10,7 +10,7 @@ export class UsersService {
 
   create(email: string, password: string) {
     //   just create an instance of user entity for hook to check the type
-    const user = this.repo.create({ email, password });
+    const user = this.repo.create({ email, password, roles: 1 });
     // save the user entity into the database
     return this.repo.save(user);
   }

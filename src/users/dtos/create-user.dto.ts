@@ -8,4 +8,6 @@ export class CreateUserDto {
   @IsString()
   @ApiProperty()
   password: string;
+  @ApiProperty()
+  role: number | 1;
 }
