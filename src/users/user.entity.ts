@@ -6,8 +6,9 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  IsNull,
+  IsNull, OneToMany
 } from 'typeorm';
+import { Book } from '../books/books.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -18,22 +19,12 @@ export class User {
   password: string;
   @Column({unique: true,
     nullable: true})
-  @Column()
-  @IsBoolean()
-  first: boolean
-  @IsOptional()
+  @Column({
+    unique: true,
+    nullable: true,
+  })  @IsOptional()
   tokens: string | ""
-  @AfterInsert()
-  logInsert() {
-    console.log('insert new user ', this.id);
-  }
-  @AfterRemove()
-  logRemove() {
-    console.log('remove user ', this.id);
-  }
-  @AfterUpdate()
-  logUpdate() {
-    console.log('Update user: ', this.id);
-  }
+  @Column()
+  roles: number | 1
 
 }

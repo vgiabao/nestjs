@@ -51,18 +51,6 @@ export class UsersController {
     return req.user;
   }
 
- 
-
-  // @Get('/whoami')
-  // async getCurrentUser(@Session() session:any){
-  //   return await  this.userService.getUser(session.userId)
-  // }
-  
-  // @UseGuards(AuthGuard('jwt'))
-  // @Get('/profile')
-  // async getProfile(@Request() request){
-  //   return request.user
-  // }
   @UseGuards(JwtAuthGuard)
   @Serialize(UserDto)
   @Get('/pr')
@@ -72,25 +60,5 @@ export class UsersController {
     return req.user;
   }
 
-  @Get('/admin/:id')
-  async getUserForAdmin(@Param() id: number) {
-    const user = await this.userService.getUser(id);
-    if (!user) throw new NotFoundException('not found user');
-    return user;
-  }
 
-  @Get('/')
-  getUsers() {
-    return this.userService.findAll();
-  }
-
-  @Delete('/:id')
-  deleteUser(@Param() id: number) {
-    return this.userService.remove(id);
-  }
-
-  @Patch('/:id')
-  updateUser(id: number, @Body() body: UpdateUserDto) {
-    return this.userService.update(id, body);
-  }
 }

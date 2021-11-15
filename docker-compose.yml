@@ -10,7 +10,7 @@ services:
       PORT: 3000
     ports:
       - "8080:3000"
-    command: npm run start:dev
+    command: npx nest start --watch
     volumes:
       - ./:/bee/src/app
   postgres:

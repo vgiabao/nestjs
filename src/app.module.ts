@@ -1,13 +1,15 @@
 import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
-import { ReportsModule } from './reports/reports.module';
 import { User } from './users/user.entity';
-import { Report } from './reports/report.entity';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_INTERCEPTOR, APP_GUARD } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
-import { Note } from './seats/note';
-import { Seat } from './seats/note.entity';
+import { RolesGuard } from './guards/role.guard';
+import { BooksModule } from './books/books.module';
+import { HistoryModule } from './history/history.module';
+import { JwtAuthGuard } from './users/auth/jwt-auth.guard';
+import { Book } from './books/books.entity';
+import { History } from './history/history.entity';
 
 @Module({
   imports: [
@@ -15,19 +17,31 @@ import { Seat } from './seats/note.entity';
     TypeOrmModule.forRoot({
       type: 'postgres',
       url: process.env.DATABASE_URL,
-      entities: [User, Report, Seat],
-      synchronize: true,
+      entities: [User, Book, History],
+      synchronize: false,
       autoLoadEntities: true,
+      migrations: ['dist/migrations/*{.ts,.js}'],
+      migrationsTableName: 'migrations_typeorm',
+      migrationsRun: true,
     }),
     UsersModule,
-    ReportsModule,
-    Note,
+    BooksModule,
+    HistoryModule,
   ],
   providers: [
     {
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,
     },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
   ],
 })
-export class AppModule {}
+export class AppModule {
+}
