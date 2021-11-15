@@ -4,20 +4,16 @@ import { UsersService } from './users.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { AuthService } from './auth.service';
-import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
-import { APP_INTERCEPTOR } from '@nestjs/core';
 import {LocalStrategy} from './local.strategy';
-import {JwtModule} from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtStrategy } from './jwt.strategy';
 @Module({
-  imports: [TypeOrmModule.forFeature([User]),  LocalStrategy, JwtModule.register({
+  imports: [TypeOrmModule.forFeature([User]), PassportModule, JwtModule.register({
     secret: "beevo.contemi",
-    signOptions: {expiresIn: "100d"}}), PassportModule],
+    signOptions: { expiresIn: '30d' },
+  }),  ],
   controllers: [UsersController],
-  providers: [UsersService, AuthService, {
-    provide: APP_INTERCEPTOR,
-    useClass: CurrentUserInterceptor,
-  }],
-})
+  providers: [UsersService, AuthService, LocalStrategy, JwtStrategy]})
 export class UsersModule {
 }

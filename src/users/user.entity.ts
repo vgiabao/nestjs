@@ -1,3 +1,4 @@
+import { IsOptional } from 'class-validator';
 import {
   AfterInsert,
   AfterRemove,
@@ -5,6 +6,7 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
+  IsNull,
 } from 'typeorm';
 @Entity()
 export class User {
@@ -14,8 +16,10 @@ export class User {
   email: string;
   @Column()
   password: string;
-  @Column()
-  tokens: string
+  @Column({unique: true,
+    nullable: true})
+  @IsOptional()
+  tokens: string | ""
   @AfterInsert()
   logInsert() {
     console.log('insert new user ', this.id);
@@ -28,4 +32,5 @@ export class User {
   logUpdate() {
     console.log('Update user: ', this.id);
   }
+
 }

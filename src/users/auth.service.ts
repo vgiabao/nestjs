@@ -3,13 +3,12 @@ import { UsersService } from './users.service';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
 import { use } from 'passport';
-import {JwtService } from "@nestjs/jwt"
-
+import { JwtService } from '@nestjs/jwt';
 const scrypt = promisify(_scrypt);
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UsersService, private jwtService: JwtService) {
+  constructor(private userService: UsersService, private jwtService: JwtService    ) {
   }
 
   async signUp(email: string, password: string) {
@@ -36,20 +35,31 @@ export class AuthService {
     }
     return user;
   }
-  async login(user:any){
-    const payload = {email: user.email, sub: user.userId}
-    return {
-      access_token: this.jwtService.sign(payload)
-    }
-  }
+  // async login(user:any){
+  //   const payload = {email: user.email, sub: user.userId}
+  //   return {
+  //     access_token: this.jwtService.sign(payload)
+  //   }
+  // }
+
+
 
   async validate(email: string, password: string) {
     const [user] = await this.userService.getUserByEmail(email);
     const [salt, storedHash] = user.password.split('.');
     const hash = await scrypt(password, salt, 32) as Buffer;
+    console.log(hash)
     if (storedHash !== hash.toString('hex')) {
       throw new BadRequestException('Not Valid');
     }
     return user;
+  }
+  async login(user: any) {
+    const payload = { email: user.email, sub: user.id };
+    console.log("payload from auth service: ",  payload)
+    const access_tokens =  this.jwtService.sign(payload)
+    return  {
+      access_tokens
+    };
   }
 }
