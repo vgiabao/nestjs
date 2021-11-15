@@ -6,8 +6,8 @@ import { User } from './users/user.entity';
 import { Report } from './reports/report.entity';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
-import { SeatsModule } from './seats/seats.module';
-import { Seat } from './seats/seat.entity';
+import { Note } from './seats/note';
+import { Seat } from './seats/note.entity';
 
 @Module({
   imports: [
@@ -21,7 +21,7 @@ import { Seat } from './seats/seat.entity';
     }),
     UsersModule,
     ReportsModule,
-    SeatsModule,
+    Note,
   ],
   providers: [
     {

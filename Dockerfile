@@ -4,14 +4,7 @@ WORKDIR /bee/src/app
 
 COPY package*.json ./
 
-RUN npm install
-
-
 #bundle app source
 COPY . .
-
-RUN npm run build
-
+CMD ["npm", "íntall"]
 EXPOSE 8080
-
-CMD ["node", "dist/main.js"]

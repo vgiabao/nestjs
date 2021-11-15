@@ -1,4 +1,4 @@
-import { IsOptional } from 'class-validator';
+import { IsBoolean, IsOptional } from 'class-validator';
 import {
   AfterInsert,
   AfterRemove,
@@ -18,6 +18,9 @@ export class User {
   password: string;
   @Column({unique: true,
     nullable: true})
+  @Column()
+  @IsBoolean()
+  first: boolean
   @IsOptional()
   tokens: string | ""
   @AfterInsert()

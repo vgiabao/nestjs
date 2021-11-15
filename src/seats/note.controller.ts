@@ -1,10 +1,10 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
-import { SeatsService } from './seats.service';
+import { NoteService } from './note.service';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { CreateSeatDto } from './dtos/create-seat.dto';
 @Controller('seats/')
-export class SeatsController {
-    constructor(private seatService: SeatsService){}
+export class NoteController {
+    constructor(private seatService: NoteService){}
     @Serialize(CreateSeatDto)
     @Get('available')
     async getAvailableSeats(){

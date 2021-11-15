@@ -1,9 +1,7 @@
 version: "3.3"
 services:
   api:
-    build:
-      dockerfile: Dockerfile
-      context: .
+    image: api
     depends_on:
       - postgres
     environment:
@@ -12,6 +10,9 @@ services:
       PORT: 3000
     ports:
       - "8080:3000"
+    command: npm run start:dev
+    volumes:
+      - ./:/bee/src/app
   postgres:
     image: postgres:14.0
     ports:
@@ -20,6 +21,8 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
       POSTGRES_DB: db
+    volumes:
+      - ../DB_Backup:/var/lib/postresql/data
   pgadmin:
     container_name: pgadmin4_container
     image: dpage/pgadmin4

@@ -1,10 +1,10 @@
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
-import { Seat } from './seat.entity';
+import { Seat } from './note.entity';
 
 @Injectable()
-export class SeatsService {
+export class NoteService {
   constructor(@InjectRepository(Seat) private repo: Repository<Seat>) {}
   async addSeat(size: number) {
     const seat = this.repo.create({ size, isAvailable: true });
