@@ -1,6 +1,6 @@
 import {
   Entity,
-  PrimaryGeneratedColumn, OneToOne,
+  PrimaryGeneratedColumn, OneToOne, Column,
 } from 'typeorm';
 import { User } from '../users/user.entity';
 import { Book } from '../books/books.entity';
@@ -12,4 +12,6 @@ export class History {
   uid: number;
   @OneToOne(type => Book, book=> book.id)
   bid: number;
+  @Column()
+  type: string;
 }
