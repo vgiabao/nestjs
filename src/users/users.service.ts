@@ -8,12 +8,15 @@ import { User } from './user.entity';
 export class UsersService {
   constructor(@InjectRepository(User) private repo: Repository<User>) {}
 
-  create(email: string, password: string) {
+  create(email: string, password: string, roles: string = "user") {
     //   just create an instance of user entity for hook to check the type
-    const user = this.repo.create({ email, password, roles: 1 });
+    const user = this.repo.create({ email, password, roles });
     // save the user entity into the database
     return this.repo.save(user);
   }
+
+
+
 
   async getUser(id: number) {
     if (!id) return null;
@@ -32,7 +35,6 @@ export class UsersService {
     const user = await this.repo.findOne(id);
     if (!user) throw new NotFoundException('Not found');
     Object.assign(user, newProps);
-    console.log('updated');
     return this.repo.save(user);
   }
 

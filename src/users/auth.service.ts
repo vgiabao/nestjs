@@ -11,7 +11,7 @@ export class AuthService {
   constructor(private userService: UsersService, private jwtService: JwtService    ) {
   }
 
-  async signUp(email: string, password: string) {
+  async signUp(email: string, password: string, roles: string = "user") {
     //    see if email is in use
     const user = await this.userService.getUserByEmail(email);
     if (user.length) throw new BadRequestException('The user is existing');
@@ -23,7 +23,7 @@ export class AuthService {
     //  do combine hashing and salt
     const combine = salt + '.' + hash.toString('hex');
     //    create new user and save it
-    return await this.userService.create(email, combine);
+    return await this.userService.create(email, combine, roles);
   }
 
   async signIn(email: string, password: string) {
@@ -43,7 +43,6 @@ export class AuthService {
   // }
 
 
-
   async validate(email: string, password: string) {
     const [user] = await this.userService.getUserByEmail(email);
     const [salt, storedHash] = user.password.split('.');
@@ -55,9 +54,9 @@ export class AuthService {
     return user;
   }
   async login(user: any) {
-    const payload = { email: user.email, sub: user.id };
+    const payload = { email: user.email, sub: user.id, roles: user.roles };
     console.log("payload from auth service: ",  payload)
-    const access_tokens =  this.jwtService.sign(payload)
+    const access_tokens =   this.jwtService.sign(payload)
     return  {
       access_tokens
     };

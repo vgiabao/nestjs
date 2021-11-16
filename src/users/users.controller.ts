@@ -1,55 +1,43 @@
-import {
-  Controller,
-  Post,
-  Get,
-  Body,
-  Param,
-  Delete,
-  Patch,
-  NotFoundException,
-  Session,
-  UseGuards, Res, Request
-} from '@nestjs/common';
+import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UsersService } from './users.service';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { UpdateUserDto } from './dtos/update-user-dto';
+import { ApiTags } from '@nestjs/swagger';
 import { UserDto } from './dtos/user.dto';
 import { Serialize } from '../interceptors/serialize.interceptor';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
-import { LocalStrategy } from './local.strategy';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { Public } from '../decorators/public.decorator';
+import { Roles } from '../decorators/roles.decorator';
+
 @ApiTags('user')
 @Controller('/auth')
 export class UsersController {
   constructor(private userService: UsersService, private authService: AuthService) {
   }
+  @Roles('public')
+  @Public()
   @Serialize(UserDto)
   @Post('/signup')
-  async createUser(@Body() body: CreateUserDto, @Session() session) {
+  async createUser(@Body() body: CreateUserDto) {
     console.log("sign upp");
-    const user = await this.authService.signUp(body.email, body.password);
-    session.userId = user.id;
-    return user;
+    return await this.authService.signUp(body.email, body.password);
   }
-
-  
+  @Roles('public')
+  @Public()
+  @Serialize(UserDto)
+  @Post('admin/signup')
+  async createAdmin(@Body() body: CreateUserDto){
+    return await this.authService.signUp(body.email, body.password, "admin");
+  }
+  @Public()
+  @Roles('public')
   @UseGuards(AuthGuard('local'))
   @Post('/login')
-  async login(@Request() req, @Session() session) {
-    const access_token = await this.authService.login(req.user);
-    session.token = access_token;
-    return access_token
+  async login(@Request() req) {
+    return await this.authService.login(req.user)
   }
 
-  @UseGuards(AuthGuard('local'))
-  @Post('/signin')
-  async signin(@Request() req) {
-    // const user = await this.authService.signIn(body.email, body.password);
-    // session.userId = user.id;
-    return req.user;
-  }
 
   @UseGuards(JwtAuthGuard)
   @Serialize(UserDto)
@@ -59,6 +47,7 @@ export class UsersController {
     console.log("user ", req.user)
     return req.user;
   }
+
 
 
 }

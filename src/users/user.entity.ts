@@ -25,6 +25,6 @@ export class User {
   })  @IsOptional()
   tokens: string | ""
   @Column()
-  roles: number | 1
+  roles: string | "user"
 
 }
