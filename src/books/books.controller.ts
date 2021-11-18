@@ -41,4 +41,13 @@ export class BooksController {
     return await this.bookService.updateBookInformation(id, body);
   }
 
+  @Roles('admin', 'user')
+  @UseGuards(JwtAuthGuard)
+  @Get('/reading')
+  async getReadingBooks(@Request() req){
+    console.log('getting reading books ');
+    return { 'get reading book ': req.user }
+    // return await this.bookService.getReadingBook(req.user.id)
+  }
+
 }

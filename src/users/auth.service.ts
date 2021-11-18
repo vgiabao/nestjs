@@ -58,7 +58,17 @@ export class AuthService {
     console.log("payload from auth service: ",  payload)
     const access_tokens =   this.jwtService.sign(payload)
     return  {
-      access_tokens
+      email: user.email,
+      access_tokens,
+      id: user.id,
+      roles: user.roles
+    };
+  }
+  async getUserByJwt(user){
+    return  {
+      email: user.email,
+      id: user.userId,
+      roles: user.roles
     };
   }
 }

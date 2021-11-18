@@ -15,27 +15,30 @@ import { Roles } from '../decorators/roles.decorator';
 export class UsersController {
   constructor(private userService: UsersService, private authService: AuthService) {
   }
+
   @Roles('public')
   @Public()
   @Serialize(UserDto)
   @Post('/signup')
   async createUser(@Body() body: CreateUserDto) {
-    console.log("sign upp");
+    console.log('sign upp');
     return await this.authService.signUp(body.email, body.password);
   }
+
   @Roles('public')
   @Public()
   @Serialize(UserDto)
   @Post('admin/signup')
-  async createAdmin(@Body() body: CreateUserDto){
-    return await this.authService.signUp(body.email, body.password, "admin");
+  async createAdmin(@Body() body: CreateUserDto) {
+    return await this.authService.signUp(body.email, body.password, 'admin');
   }
+
   @Public()
   @Roles('public')
   @UseGuards(AuthGuard('local'))
   @Post('/login')
   async login(@Request() req) {
-    return await this.authService.login(req.user)
+    return await this.authService.login(req.user);
   }
 
 
@@ -43,11 +46,25 @@ export class UsersController {
   @Serialize(UserDto)
   @Get('/pr')
   async getProfile(@Request() req) {
-    console.log(req)
-    console.log("user ", req.user)
+    console.log(req);
+    console.log('user ', req.user);
     return req.user;
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Roles('user', 'admin')
+  @Get('/user')
+  async getUserById(@Request() req) {
+    console.log('user from controller ', req.user);
+    return this.authService.getUserByJwt(req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Roles('admin')
+  @Get('/users')
+  async getUsers() {
+    return await this.userService.getUsers();
+  }
 
 
 }

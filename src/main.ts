@@ -6,7 +6,7 @@ import { RolesGuard } from './guards/role.guard';
 const cookieSession = require("cookie-session")
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create(AppModule, { cors: true });
     app.useGlobalPipes(new ValidationPipe({whitelist: true}));
     app.use(cookieSession({
         keys: ['123']

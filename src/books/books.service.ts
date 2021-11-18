@@ -1,8 +1,7 @@
-import { Body, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Book } from './books.entity';
-import { CreateBookDto } from './dtos/create-book.dto';
 import { UpdateBookDtos } from './dtos/update-book.dtos';
 
 @Injectable()
@@ -30,6 +29,15 @@ export class BooksService {
     if (!book) throw new NotFoundException('not found');
     await  this.repo.remove(book)
     return `remote book ${id}`
+  }
+  async getReadingBook(uid: number){
+    return await this.repo.find({ where: { uid: uid, type: 'reading' } })
+  }
+  async getReadBook(uid: number){
+    return await this.repo.find({ where: { uid: uid, type: 'read' } })
+  }
+  async getFavouriteBook(uid: number){
+    return await this.repo.find({ where: { uid: uid, type: 'favourite' } })
   }
 
 }

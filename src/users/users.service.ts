@@ -53,4 +53,7 @@ export class UsersService {
     if (!user) throw new NotFoundException('Not valid');
     return user;
   }
+  async getUsers(){
+    return await this.repo.find()
+  }
 }
